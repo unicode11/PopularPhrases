@@ -1,0 +1,59 @@
+{% extends 'index.html' %}
+
+{% block title %}Цитаты{% endblock %}
+
+{% block content %}
+    <section class="left">
+        {% if quotes %}
+            {% for quote in quotes %}
+                <div class="quote-rows">
+                    <div class="quote-card">
+                        <div class="quote" id="quote-{{ quote.id }}">
+                            <img src="{{ quote.image }}">
+                            <h4>"{{ quote.text }}"</h4>
+                            <h5>- {{ quote.title }}</h5>
+                            <div class="quote-data">
+                                <button class="like-button" onclick="sendVote({{ quote.id }}, 'like', this)">👍</button>
+                                <button class="dislike-button" onclick="sendVote({{ quote.id }}, 'dislike', this)">👎
+                                </button>
+                                <span class="quote-views">👁️ {{ quote.views }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="no-quote">
+                <p>"Тут ещё нет цитат! Будьте первым кто её добавит!"</p>
+            </div>
+        {% endif %}
+    </section>
+
+    <script>
+        function sendVote(quoteId, type) {
+            fetch(`/vote/${quoteId}/${type}/`, {
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": "{{ csrf_token }}",
+                }
+            })
+                .then(res => res.json())
+                .then(() => {
+                    const card = document.getElementById(`quote-${quoteId}`);
+                    const like = card.querySelector(".like-button");
+                    const dislike = card.querySelector(".dislike-button");
+
+                    like.innerText = `👍`;
+                    dislike.innerText = `👎`;
+
+                    if (type === 'like') {
+                        like.classList.add('active-like');
+                        dislike.classList.remove('active-dislike');
+                    } else {
+                        dislike.classList.add('active-dislike');
+                        like.classList.remove('active-like');
+                    }
+                });
+        }
+    </script>
+{% endblock %}

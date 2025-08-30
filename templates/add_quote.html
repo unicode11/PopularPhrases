@@ -1,0 +1,63 @@
+{% extends 'index.html' %}
+
+{% block title %}Добавить цитату{% endblock %}
+
+{% block content %}
+    <section class="add-quote">
+
+        <form method="post" class="quote-form">
+            {% csrf_token %}
+
+            <div class="form-group">
+                {{ form.text.label_tag }}
+                {{ form.text }}
+            </div>
+
+            <div class="form-group">
+                <label for="id_title">Книга или фильм:</label>
+                <input list="titles" name="title" id="id_title" class="form-input">
+                <datalist id="titles">
+                    {% for t in titles %}
+                        <option value="{{ t }}">
+                    {% endfor %}
+                </datalist>
+                <p class="field-error" id="title-error" style="display:none;"></p>
+            </div>
+
+            <div class="form-group">
+                {{ form.weight.label_tag }}
+                {{ form.weight }}
+            </div>
+
+            <button type="submit" class="submit-btn">Добавить</button>
+        </form>
+
+    </section>
+
+    <script>
+        const titleInput = document.getElementById('id_title');
+        const titleError = document.getElementById('title-error');
+
+        titleInput.addEventListener('input', () => {
+            const title = titleInput.value;
+            if (!title) {
+                titleInput.classList.remove('error');
+                titleError.style.display = 'none';
+                return;
+            }
+
+            fetch(`/check-title/?title=${(title)}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.limit_reached) {
+                        titleInput.classList.add('error');
+                        titleError.innerText = data.message;
+                        titleError.style.display = 'block';
+                    } else {
+                        titleInput.classList.remove('error');
+                        titleError.style.display = 'none';
+                    }
+                });
+        });
+    </script>
+{% endblock %}

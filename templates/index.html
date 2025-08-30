@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Цитаты{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'pp/style.css' %}">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
+    <link rel="icon" type="image/x-icon" href="{% static 'favicon.ico' %}">
+
+</head>
+<body>
+<header>
+    <div class="logo">
+        <p> Цитаты из фильмов и книг </p>
+    </div>
+    <nav class="nav">
+        <a href="/">
+            <button class="header-button">Главная</button>
+        </a>
+        <a href="/top-10">
+            <button class="header-button">Топ-10 цитат</button>
+        </a>
+        <a href="/add-quote">
+            <button class="header-button">Добавить цитату</button>
+        </a>
+    </nav>
+</header>
+
+<main>
+    {% block content %}{% endblock %}
+</main>
+
+<footer>
+    <p>Сайт создан по заданию от АйТи-Солюшн</p>
+</footer>
+</body>
+</html>

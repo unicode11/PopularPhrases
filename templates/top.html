@@ -1,0 +1,23 @@
+{% extends 'index.html' %}
+
+{% block title %}Топ-10 цитат{% endblock %}
+
+{% block content %}
+    <section class="top-quotes">
+        <h2 class="section-title">🔥 Топ-10 цитат по лайкам</h2>
+
+        <div class="top-quotes-container">
+            {% for quote in quotes %}
+                <div class="top-quote-card">
+                    <div class="top-quote-text">“{{ quote.text }}”</div>
+                    <div class="top-quote-title">{{ quote.title }}</div>
+                    <div class="top-quote-data">
+                        <span>👍 {{ quote.likes }}</span>
+                    </div>
+                </div>
+            {% empty %}
+                <p>Цитат пока нет.</p>
+            {% endfor %}
+        </div>
+    </section>
+{% endblock %}
